@@ -20,7 +20,7 @@ def get_naver_news_comments(wait_time=5, delay_time=0.1):
     driver.implicitly_wait(wait_time)
 
     # 기사 url 다운로드
-    df = pd.read_csv('./칼부림_20230922.csv', encoding='utf-8')
+    df = pd.read_csv('D:\Git\CSE-sentiment\getData\칼부림_20230922.csv', encoding='utf-8')
     company_list = []
     url_list = []
     for i in df['link']:
@@ -118,7 +118,7 @@ def get_naver_news_comments(wait_time=5, delay_time=0.1):
         url_i = url_i + 1
         print("=======================================================================")
 
-    with open('./칼부림_20230922.csv', 'w', encoding='utf-8-sig', newline='') as csvfile:
+    with open('D:\Git\CSE-sentiment\getData\Test.csv', 'w', encoding='utf-8-sig', newline='') as csvfile:
         writer = csv.writer(csvfile)
         print(company_list_2)
         writer.writerow(['작성자', '작성날짜', '언론사', '실족/살인', 'url', '댓글내용'])
