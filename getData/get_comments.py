@@ -128,6 +128,6 @@ def get_naver_news_comments(wait_time=5, delay_time=0.1):
                 [nicknames_list_2[i], datetimes_list_2[i], company_list_2[i], 0, url_list_2[i], contents_list[i]])
 
 
-# df1 = pd.read_csv('./naver_news_comments_202302.csv', encoding='utf-8')
+df1 = pd.read_csv('D:\Git\CSE-sentiment\getData\칼부림_20230922.csv', encoding='utf-8')
 
 get_naver_news_comments()
