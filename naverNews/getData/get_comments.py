@@ -2,7 +2,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.chrome import ChromeDriverMan
 from selenium.webdriver.support import expected_conditions as EC
 
 import csv
@@ -20,7 +20,7 @@ def get_naver_news_comments(wait_time=5, delay_time=0.1):
     driver.implicitly_wait(wait_time)
 
     # 기사 url 다운로드
-    df = pd.read_csv('D:\Git\CSE-sentiment\getData\칼부림_20231129.csv', encoding='utf-8')
+    df = pd.read_csv(r'D:\Git\CSE-sentiment\getData\url_result.csv', encoding='utf-8')
     company_list = []
     url_list = []
     for i in df['link']:
@@ -97,10 +97,7 @@ def get_naver_news_comments(wait_time=5, delay_time=0.1):
         # datetimes_list.append([datetime.text for datetime in datetimes])
 
         # 3)댓글 내용
-        # selenium으로 댓글내용 포함된 태그 모두 수집
-        # contents = driver.find_elements_by_css_selector('span.u_cbox_contents')
         contents = driver.find_elements(by=By.CSS_SELECTOR, value="span.u_cbox_contents")
-        # 리스트에 텍스트만 담기 (리스트 컴프리핸션 문법)
         list_contents = [content.text for content in contents]
         for i in list_contents:
             print(i)
@@ -118,7 +115,7 @@ def get_naver_news_comments(wait_time=5, delay_time=0.1):
         url_i = url_i + 1
         print("=======================================================================")
 
-    with open('D:\Git\CSE-sentiment\getData\Test.csv', 'w', encoding='utf-8-sig', newline='') as csvfile:
+    with open(r'D:\Git\CSE-sentiment\getData\Test.csv', 'w', encoding='utf-8-sig', newline='') as csvfile:
         writer = csv.writer(csvfile)
         print(company_list_2)
         writer.writerow(['작성자', '작성날짜', '언론사', '실족/살인', 'url', '댓글내용'])
@@ -128,6 +125,6 @@ def get_naver_news_comments(wait_time=5, delay_time=0.1):
                 [nicknames_list_2[i], datetimes_list_2[i], company_list_2[i], 0, url_list_2[i], contents_list[i]])
 
 
-df1 = pd.read_csv('D:\Git\CSE-sentiment\getData\칼부림_20231129.csv', encoding='utf-8')
+df1 = pd.read_csv(r'D:\Git\CSE-sentiment\getData\url_result.csv', encoding='utf-8')
 
 get_naver_news_comments()

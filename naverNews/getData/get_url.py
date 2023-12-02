@@ -4,7 +4,6 @@ import requests
 import re
 import datetime
 from tqdm import tqdm
-import time
 import sys
 
 
@@ -20,21 +19,19 @@ def makePgNum(num):
 
 
 # 크롤링할 url 생성하는 함수 만들기(검색어, 크롤링 시작 페이지, 크롤링 종료 페이지)
-# &ds=2023.07.20&de=2023.08.30&
+
 def makeUrl(search, start_pg, end_pg):
     if start_pg == end_pg:
         start_page = makePgNum(start_pg)
-         #https://search.naver.com/search.naver?where=news&query=칼부림&sm=tab_opt&sort=0&photo=0&field=0&pd=3&ds=2023.07.20&de=2023.08.30&docid=&related=0&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so:r,p:from20230720to20230830&is_sug_officeid=0&office_category=0&service_area=0
-        # 정렬을 포함한 url로 수정함.
-        url = "https://search.naver.com/search.naver?where=news&sm=tab_opt&sort=0&photo=0&field=0&pd=3&ds=2023.07.20&de=2023.07.25&docid=&related=0&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so:r,p:from20230720to20230830&is_sug_officeid=0&office_category=0&service_area=0&query=" + search + "&start=" + str(start_page)
+        url = "https://search.naver.com/search.naver?where=news&sm=tab_pge&query=" + search + "&start=" + str(
+            start_page)
         print("생성url: ", url)
         return url
     else:
         urls = []
         for i in range(start_pg, end_pg + 1):
             page = makePgNum(i)
-            url = "https://search.naver.com/search.naver?where=news&sm=tab_opt&sort=0&photo=0&field=0&pd=3&ds=2023.08.01&de=2023.08.06&docid=&related=0&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so:r,p:from20230720to20230830&is_sug_officeid=0&office_category=0&service_area=0&query=" + search + "&start=" + str(
-                page)
+            url = "https://search.naver.com/search.naver?where=news&sm=tab_pge&query=" + search + "&start=" + str(page)
             urls.append(url)
         print("생성url: ", urls)
         return urls
@@ -50,10 +47,9 @@ def news_attrs_crawler(articles, attrs):
 
 
 # ConnectionError방지
-headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"
-    # 필요에 따라 추가 헤더를 여기에 포함시킬 수 있습니다.
-}
+headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                         "Chrome/107.0.0.0 Safari/537.36"}
+
 
 # html생성해서 기사크롤링하는 함수 만들기(url): 링크를 반환
 def articles_crawler(url):
@@ -90,7 +86,6 @@ news_dates = []
 for i in url:
     url = articles_crawler(url)
     news_url.append(url)
-    time.sleep(2)
 
 
 # 제목, 링크, 내용 1차원 리스트로 꺼내는 함수 생성
@@ -112,30 +107,24 @@ final_urls = []
 for i in tqdm(range(len(news_url_1))):
     if "news.naver.com" in news_url_1[i]:
         final_urls.append(news_url_1[i])
-    elif "n.news.naver.com"in news_url_1[i]:
-        final_urls.append(news_url_1[i])
     else:
         pass
 
 # 뉴스 내용 크롤링
 
 for i in tqdm(final_urls):
-    # 각 기사 html get하기
     news = requests.get(i, headers=headers)
     news_html = BeautifulSoup(news.text, "html.parser")
 
-    # 언론사 이름 가져오기
     html_company = news_html.select_one(
         "#ct > div.media_end_head.go_trans > div.media_end_head_top > a.media_end_head_top_logo > img")
     if html_company != None:
         company = html_company.attrs['title']
 
-    # 뉴스 제목 가져오기
     title = news_html.select_one("#ct > div.media_end_head.go_trans > div.media_end_head_title > h2")
     if title == None:
         title = news_html.select_one("#content > div.end_ct > div > h2")
 
-    # 뉴스 본문 가져오기
     content = news_html.select("div#dic_area")
     if content == []:
         content = news_html.select("#articeBody")
@@ -164,7 +153,6 @@ for i in tqdm(final_urls):
         news_date = re.sub(pattern=pattern1, repl='', string=str(news_date))
     # 날짜 가져오기
     news_dates.append(news_date)
-    time.sleep(2)
 
 print("검색된 기사 갯수: 총 ", (page2 + 1 - page) * 10, '개')
 print("\n[뉴스 제목]")
@@ -196,4 +184,4 @@ print("중복 제거 후 행 개수: ", len(news_df))
 
 # 데이터 프레임 저장
 now = datetime.datetime.now()
-news_df.to_csv('{}_{}.csv'.format(search, now.strftime('%Y%m%d')), encoding='utf-8-sig', index=False)
+news_df.to_csv('{}.csv'.format(search), encoding='utf-8-sig', index=False)
