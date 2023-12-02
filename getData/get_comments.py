@@ -20,7 +20,7 @@ def get_naver_news_comments(wait_time=5, delay_time=0.1):
     driver.implicitly_wait(wait_time)
 
     # 기사 url 다운로드
-    df = pd.read_csv('D:\Git\CSE-sentiment\getData\칼부림_20231129.csv', encoding='utf-8')
+    df = pd.read_csv(r'D:\Git\CSE-sentiment\getData\url_0801_0806.csv', encoding='utf-8')
     company_list = []
     url_list = []
     for i in df['link']:
@@ -45,6 +45,7 @@ def get_naver_news_comments(wait_time=5, delay_time=0.1):
     url_i = 0
 
     for url in tqdm(comment_url_list):
+        time.sleep(2)
         # url = "https://n.news.naver.com/mnews/article/comment/015/0004638195?sid=102"
         # 인자로 입력받은 url 주소를 가져와서 접속
         driver.get(url)
@@ -118,16 +119,16 @@ def get_naver_news_comments(wait_time=5, delay_time=0.1):
         url_i = url_i + 1
         print("=======================================================================")
 
-    with open('D:\Git\CSE-sentiment\getData\Test.csv', 'w', encoding='utf-8-sig', newline='') as csvfile:
+    with open(r'D:\Git\CSE-sentiment\getData\Test.csv', 'w', encoding='utf-8-sig', newline='') as csvfile:
         writer = csv.writer(csvfile)
         print(company_list_2)
-        writer.writerow(['작성자', '작성날짜', '언론사', '실족/살인', 'url', '댓글내용'])
+        writer.writerow(['작성자', '작성날짜', '언론사', '_', 'url', '댓글내용'])
         # writer.writerow(['작성자', '작성날짜', '댓글내용'])
         for i in tqdm(range(len(nicknames_list))):
             writer.writerow(
                 [nicknames_list_2[i], datetimes_list_2[i], company_list_2[i], 0, url_list_2[i], contents_list[i]])
 
 
-df1 = pd.read_csv('D:\Git\CSE-sentiment\getData\칼부림_20231129.csv', encoding='utf-8')
+df1 = pd.read_csv(r'D:\Git\CSE-sentiment\getData\url_0801_0806.csv', encoding='utf-8')
 
 get_naver_news_comments()
