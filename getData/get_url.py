@@ -26,14 +26,14 @@ def makeUrl(search, start_pg, end_pg):
         start_page = makePgNum(start_pg)
          #https://search.naver.com/search.naver?where=news&query=칼부림&sm=tab_opt&sort=0&photo=0&field=0&pd=3&ds=2023.07.20&de=2023.08.30&docid=&related=0&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so:r,p:from20230720to20230830&is_sug_officeid=0&office_category=0&service_area=0
         # 정렬을 포함한 url로 수정함.
-        url = "https://search.naver.com/search.naver?where=news&sm=tab_opt&sort=0&photo=0&field=0&pd=3&ds=2023.07.20&de=2023.07.25&docid=&related=0&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so:r,p:from20230720to20230830&is_sug_officeid=0&office_category=0&service_area=0&query=" + search + "&start=" + str(start_page)
+        url = "https://search.naver.com/search.naver?where=news&sm=tab_opt&sort=0&photo=0&field=0&pd=3&ds=2023.08.24&de=2023.08.29&docid=&related=0&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so:r,p:from20230720to20230830&is_sug_officeid=0&office_category=0&service_area=0&query=" + search + "&start=" + str(start_page)
         print("생성url: ", url)
         return url
     else:
         urls = []
         for i in range(start_pg, end_pg + 1):
             page = makePgNum(i)
-            url = "https://search.naver.com/search.naver?where=news&sm=tab_opt&sort=0&photo=0&field=0&pd=3&ds=2023.08.01&de=2023.08.06&docid=&related=0&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so:r,p:from20230720to20230830&is_sug_officeid=0&office_category=0&service_area=0&query=" + search + "&start=" + str(
+            url = "https://search.naver.com/search.naver?where=news&sm=tab_opt&sort=0&photo=0&field=0&pd=3&ds=2023.08.24&de=2023.08.29&docid=&related=0&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so:r,p:from20230720to20230830&is_sug_officeid=0&office_category=0&service_area=0&query=" + search + "&start=" + str(
                 page)
             urls.append(url)
         print("생성url: ", urls)
